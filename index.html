@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>لـ أحن قلب في الدنيا</title>
+  <style>
+    :root{
+      --baby-blue:#A7D8FF;
+      --soft-pink:#F8BBD9;
+      --ink:#0a1828;
+      --ink-soft:#1a3a5c;
+      --shadow:0 20px 60px rgba(58,90,137,0.18);
+      --glow-blue:0 0 25px rgba(167,216,255,.50);
+      --glow-pink:0 0 25px rgba(248,187,217,.45);
+      --transition:all .45s ease;
+      --max:1200px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+
+    body{
+      font-family:"Segoe UI","Tahoma","Arial",sans-serif;
+      color:var(--ink);
+      min-height:100vh;
+      overflow-x:hidden;
+      background:
+        radial-gradient(circle at 15% 20%,rgba(255,255,255,0.45),transparent 20%),
+        radial-gradient(circle at 85% 15%,rgba(248,187,217,0.30),transparent 18%),
+        radial-gradient(circle at 20% 80%,rgba(167,216,255,0.28),transparent 18%),
+        linear-gradient(135deg,#c5e3fa 0%,#ddf0ff 20%,#fce8f3 48%,#fffbfd 68%,#d0eaff 100%);
+      background-size:200% 200%;
+      animation:bgMove 18s ease-in-out infinite;
+    }
+
+    body::before{
+      content:"";position:fixed;inset:0;
+      background:radial-gradient(circle at center,rgba(255,255,255,0.12),transparent 45%);
+      pointer-events:none;z-index:-2;
+    }
+
+    @keyframes bgMove{
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
+
+    a{text-decoration:none;color:inherit;}
+
+    .container{width:min(92%,var(--max));margin:auto;}
+
+    .glass{
+      background:linear-gradient(135deg,rgba(255,255,255,0.60),rgba(255,255,255,0.35));
+      backdrop-filter:blur(22px);
+      -webkit-backdrop-filter:blur(22px);
+      border:1.5px solid rgba(255,255,255,0.55);
+      box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.60);
+    }
+
+    .section{padding:90px 0;position:relative;}
+
+    .section-title{
+      text-align:center;margin-bottom:18px;
+      font-size:clamp(1.8rem,3vw,3.1rem);
+      color:var(--ink);font-weight:800;
+    }
+
+    .section-subtitle{
+      text-align:center;max-width:850px;margin:0 auto 42px;
+      font-size:1.05rem;line-height:2;
+      color:var(--ink-soft);font-weight:500;
+    }
+
+    .reveal{opacity:0;transform:translateY(40px) scale(.98);transition:opacity .9s ease,transform .9s ease;}
+    .reveal.active{opacity:1;transform:translateY(0) scale(1);}
+
+    /* ── LOADING ── */
+    .loading-screen{
+      position:fixed;inset:0;z-index:9999;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg,#b8d9f5,#f8d5e8,#daf1ff);
+    }
+    .loading-screen.fade-out{opacity:0;visibility:hidden;transition:opacity .9s ease,visibility .9s ease;}
+    .loader-box{width:min(92%,520px);padding:40px 30px;border-radius:32px;text-align:center;}
+    .loader-heart{font-size:4rem;display:inline-block;animation:pulseHeart 1.5s ease-in-out infinite;margin-bottom:14px;}
+    .loader-title{font-size:2rem;margin-bottom:12px;color:var(--ink);font-weight:800;}
+    .loader-text{color:var(--ink-soft);line-height:1.9;margin-bottom:22px;font-weight:500;}
+    .loader-bar{width:100%;height:14px;border-radius:999px;background:rgba(255,255,255,0.40);overflow:hidden;border:1px solid rgba(255,255,255,0.5);}
+    .loader-bar span{display:block;height:100%;width:0%;border-radius:inherit;background:linear-gradient(90deg,#6cb8f0,#e87fb8,#fff);animation:loadBar 3.2s ease forwards;}
+
+    @keyframes pulseHeart{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+    @keyframes loadBar{to{width:100%;}}
+
+    /* ── LOGIN ── */
+    .login-layer{
+      position:fixed;inset:0;z-index:9000;
+      display:flex;align-items:center;justify-content:center;padding:22px;
+      background:linear-gradient(135deg,#c5e3fa,#fce8f3,#daf1ff);
+      transition:opacity .7s ease,visibility .7s ease;
+    }
+    .login-layer.hidden-state{opacity:0;visibility:hidden;pointer-events:none;}
+
+    .login-card{width:min(92vw,470px);border-radius:34px;padding:38px 30px;text-align:center;position:relative;overflow:hidden;}
+    .login-card::before,.login-card::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;filter:blur(22px);opacity:.35;z-index:0;}
+    .login-card::before{top:-70px;right:-70px;background:rgba(167,216,255,.9);}
+    .login-card::after{bottom:-90px;left:-60px;background:rgba(248,187,217,.85);}
+    .login-card>*{position:relative;z-index:1;}
+
+    .login-badge{
+      width:82px;height:82px;margin:0 auto 14px;border-radius:50%;
+      display:grid;place-items:center;font-size:2rem;
+      background:linear-gradient(135deg,rgba(255,255,255,.60),rgba(255,255,255,.28));
+      border:1.5px solid rgba(255,255,255,.55);
+      box-shadow:var(--glow-blue),var(--glow-pink);
+      animation:floatY 4s ease-in-out infinite;
+    }
+
+    .login-title{font-size:2rem;margin-bottom:10px;color:var(--ink);font-weight:800;}
+    .login-desc{font-size:1rem;line-height:1.9;color:var(--ink-soft);margin-bottom:22px;font-weight:500;}
+
+    .login-input{
+      width:100%;padding:18px 20px;border-radius:18px;
+      border:1.5px solid rgba(108,184,240,0.45);
+      background:rgba(255,255,255,0.65);
+      color:var(--ink);outline:none;font-size:1.1rem;
+      text-align:center;letter-spacing:3px;
+      transition:var(--transition);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.65);
+      margin-bottom:14px;
+    }
+    .login-input::placeholder{color:rgba(10,24,40,0.40);letter-spacing:0;font-size:.95rem;}
+    .login-input:focus{
+      border-color:rgba(108,184,240,0.75);
+      background:rgba(255,255,255,0.80);
+      box-shadow:0 0 0 4px rgba(167,216,255,0.20),var(--glow-blue);
+    }
+
+    .login-btn{
+      width:100%;padding:17px 18px;border:none;border-radius:18px;cursor:pointer;
+      color:#fff;font-size:1rem;font-weight:700;
+      background:linear-gradient(135deg,#6cb8f0,#e87fb8);
+      box-shadow:0 14px 30px rgba(100,129,179,.25),var(--glow-pink);
+      transition:var(--transition);
+    }
+    .login-btn:hover{transform:translateY(-3px);box-shadow:0 18px 34px rgba(100,129,179,.32);}
+
+    .login-hint{margin-top:14px;font-size:.94rem;color:var(--ink-soft);}
+
+    .error-msg{
+      min-height:26px;margin:10px 0;color:#c0392b;
+      font-size:.95rem;font-weight:700;
+      opacity:0;transform:translateY(-6px);transition:all .35s ease;
+    }
+    .error-msg.show{opacity:1;transform:translateY(0);animation:shake .45s ease;}
+
+    @keyframes shake{
+      0%,100%{transform:translateX(0);}
+      25%{transform:translateX(6px);}
+      50%{transform:translateX(-6px);}
+      75%{transform:translateX(4px);}
+    }
+
+    /* ── SITE SHELL ── */
+    .site-shell{opacity:0;transition:opacity .8s ease;}
+    .site-shell.visible{opacity:1;}
+
+    /* ── NAV ── */
+    .top-nav{
+      position:fixed;top:18px;left:50%;transform:translateX(-50%);
+      width:min(92%,1120px);padding:12px 18px;border-radius:999px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:500;
+    }
+    .brand{font-size:1rem;font-weight:800;color:var(--ink);white-space:nowrap;}
+    .nav-links{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+    .nav-links a{
+      padding:9px 14px;border-radius:999px;font-size:.90rem;
+      color:var(--ink-soft);font-weight:600;transition:var(--transition);border:1px solid transparent;
+    }
+    .nav-links a:hover{background:rgba(255,255,255,.50);border-color:rgba(255,255,255,.60);color:var(--ink);}
+
+    /* ── HERO ── */
+    .hero{min-height:100vh;display:flex;align-items:center;padding-top:130px;padding-bottom:80px;overflow:hidden;}
+    .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:26px;align-items:center;}
+
+    .hero-card{border-radius:34px;padding:36px;position:relative;overflow:hidden;}
+    .hero-card::before{
+      content:"";position:absolute;inset:auto -80px -100px auto;width:240px;height:240px;
+      background:radial-gradient(circle,rgba(248,187,217,.22),transparent 70%);
+      filter:blur(10px);pointer-events:none;
+    }
+
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:10px 16px;border-radius:999px;margin-bottom:18px;
+      color:var(--ink-soft);font-weight:600;font-size:.93rem;
+      background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.60);
+    }
+
+    .hero-title{font-size:clamp(2.4rem,5vw,5rem);line-height:1.15;margin-bottom:18px;color:var(--ink);font-weight:900;}
+    .hero-title span{
+      background:linear-gradient(135deg,#1a4a7a,#2a6aaa,#7a3a8a);
+      -webkit-background-clip:text;background-clip:text;color:transparent;
+    }
+
+    .hero-text{font-size:1.05rem;line-height:2.1;color:var(--ink-soft);margin-bottom:18px;font-weight:500;}
+
+    .typing-line{
+      min-height:38px;font-size:1.05rem;color:var(--ink);
+      margin-bottom:24px;font-weight:700;
+    }
+    .typing-cursor{display:inline-block;margin-right:2px;animation:blink 1s infinite;color:#6cb8f0;}
+    @keyframes blink{50%{opacity:0;}}
+
+    .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;}
+
+    .btn{
+      border:none;cursor:pointer;padding:15px 24px;border-radius:18px;
+      font-size:1rem;font-weight:700;transition:var(--transition);
+    }
+    .btn-primary{color:#fff;background:linear-gradient(135deg,#6cb8f0,#e87fb8);box-shadow:0 16px 30px rgba(103,127,160,.22);}
+    .btn-secondary{
+      color:var(--ink);
+      background:rgba(255,255,255,.60);
+      border:1.5px solid rgba(255,255,255,.70);
+    }
+    .btn:hover{transform:translateY(-4px);box-shadow:0 20px 38px rgba(96,120,155,.24);}
+
+    /* ── HERO ORB ── */
+    .hero-side{position:relative;min-height:520px;display:grid;place-items:center;}
+    .love-orb{
+      width:min(85vw,420px);aspect-ratio:1/1;border-radius:50%;
+      position:relative;display:grid;place-items:center;
+      background:
+        radial-gradient(circle at 30% 30%,rgba(255,255,255,.92),rgba(255,255,255,.38) 24%,transparent 42%),
+        linear-gradient(135deg,rgba(167,216,255,.50),rgba(248,187,217,.45));
+      border:1.5px solid rgba(255,255,255,.55);
+      box-shadow:0 0 80px rgba(167,216,255,.22),0 0 55px rgba(248,187,217,.20),inset 0 0 55px rgba(255,255,255,.18);
+      animation:floatY 6s ease-in-out infinite;overflow:hidden;
+    }
+    .love-orb::before,.love-orb::after{
+      content:"";position:absolute;inset:18px;border-radius:50%;
+      border:1px dashed rgba(10,24,40,.10);animation:spin 18s linear infinite;
+    }
+    .love-orb::after{inset:45px;animation-direction:reverse;animation-duration:24s;}
+
+    .orb-core{
+      width:72%;aspect-ratio:1/1;border-radius:50%;
+      display:grid;place-items:center;text-align:center;padding:20px;
+      background:linear-gradient(135deg,rgba(255,255,255,.60),rgba(255,255,255,.28));
+      border:1px solid rgba(255,255,255,.55);
+    }
+    .orb-core h3{font-size:1.5rem;margin-bottom:10px;color:var(--ink);font-weight:800;}
+    .orb-core p{line-height:1.95;font-size:.93rem;color:var(--ink-soft);font-weight:500;}
+
+    @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+    @keyframes floatY{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
+
+    /* ── COUNTER ── */
+    .counter-wrap{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;margin-top:30px;}
+    .counter-card{
+      padding:22px 14px;border-radius:22px;text-align:center;
+      transition:var(--transition);position:relative;overflow:hidden;
+    }
+    .counter-card:hover{transform:translateY(-8px);box-shadow:0 22px 42px rgba(89,112,146,.18),var(--glow-blue);}
+    .counter-value{font-size:clamp(1.5rem,2.8vw,2.4rem);font-weight:800;color:var(--ink);margin-bottom:8px;}
+    .counter-label{font-size:.95rem;color:var(--ink-soft);font-weight:600;}
+
+    /* ── LOVE CARDS ── */
+    .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .love-card{padding:24px;border-radius:26px;transition:var(--transition);}
+    .love-card:hover{transform:translateY(-8px);box-shadow:0 25px 46px rgba(88,112,148,.18),var(--glow-blue);}
+    .love-card .icon{
+      width:58px;height:58px;display:grid;place-items:center;
+      border-radius:18px;margin-bottom:16px;font-size:1.6rem;
+      background:linear-gradient(135deg,rgba(255,255,255,.65),rgba(255,255,255,.32));
+      border:1px solid rgba(255,255,255,.58);
+    }
+    .love-card h3{margin-bottom:10px;font-size:1.2rem;color:var(--ink);font-weight:800;}
+    .love-card p{color:var(--ink-soft);line-height:2;font-size:1rem;font-weight:500;}
+
+    /* ── MESSAGE BOX ── */
+    .message-box{
+      padding:36px;border-radius:32px;
+      line-height:2.2;font-size:1.05rem;
+      color:var(--ink-soft);font-weight:500;
+      position:relative;overflow:hidden;
+    }
+    .message-box::before{
+      content:"\201C";position:absolute;top:-10px;right:22px;
+      font-size:9rem;line-height:1;color:rgba(10,24,40,.06);pointer-events:none;
+    }
+    .message-box p+p{margin-top:18px;}
+
+    /* ── TIMELINE ── */
+    .timeline{position:relative;max-width:950px;margin:0 auto;padding:20px 0;}
+    .timeline::before{
+      content:"";position:absolute;top:0;bottom:0;right:50%;width:2px;
+      background:linear-gradient(to bottom,rgba(10,24,40,.08),rgba(10,24,40,.28),rgba(10,24,40,.08));
+      transform:translateX(50%);
+    }
+    .timeline-item{width:calc(50% - 30px);padding:22px;border-radius:24px;margin-bottom:24px;position:relative;}
+    .timeline-item:nth-child(odd){margin-right:auto;}
+    .timeline-item:nth-child(even){margin-left:auto;}
+    .timeline-item::after{
+      content:"";position:absolute;top:28px;width:18px;height:18px;border-radius:50%;
+      background:linear-gradient(135deg,#6cb8f0,#e87fb8);
+      box-shadow:0 0 14px rgba(167,216,255,.55);border:2.5px solid #fff;
+    }
+    .timeline-item:nth-child(odd)::after{left:calc(100% + 21px);}
+    .timeline-item:nth-child(even)::after{right:calc(100% + 21px);}
+    .timeline-item .date{font-size:.88rem;margin-bottom:8px;color:#6b90b0;font-weight:700;}
+    .timeline-item h3{margin-bottom:10px;color:var(--ink);font-size:1.15rem;font-weight:800;}
+    .timeline-item p{line-height:2;color:var(--ink-soft);font-weight:500;}
+
+    /* ── DUAS ── */
+    .dua-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+    .dua-card{
+      padding:26px;border-radius:26px;
+      font-size:1.05rem;line-height:2.15;
+      color:var(--ink-soft);font-weight:600;
+      transition:var(--transition);
+    }
+    .dua-card:hover{transform:translateY(-6px);box-shadow:0 24px 42px rgba(90,110,145,.16),var(--glow-pink);}
+
+    /* ── FUTURE ── */
+    .future-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+    .future-card{padding:28px;border-radius:26px;min-height:220px;transition:var(--transition);}
+    .future-card:hover{transform:translateY(-6px);box-shadow:0 20px 42px rgba(84,106,142,.16),var(--glow-blue);}
+    .future-card h3{font-size:1.25rem;margin-bottom:12px;color:var(--ink);font-weight:800;}
+    .future-card p{line-height:2.05;color:var(--ink-soft);font-weight:500;}
+
+    /* ── LETTER TRIGGERS ── */
+    .letter-trigger-wrap{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:28px;}
+    .secret-btn{opacity:.55;}
+    .secret-btn:hover{opacity:1;}
+
+    /* ── FOOTER ── */
+    .footer{padding:36px 0 52px;text-align:center;}
+    .footer-card{padding:30px 24px;border-radius:28px;}
+    .footer p{line-height:2;font-size:1rem;color:var(--ink-soft);font-weight:500;}
+    .footer small{display:block;margin-top:14px;color:#6b90b0;font-weight:600;}
+
+    /* ── MODALS ── */
+    .modal{
+      position:fixed;inset:0;z-index:9500;
+      display:flex;align-items:center;justify-content:center;padding:20px;
+      background:rgba(10,20,40,.22);backdrop-filter:blur(14px);
+      opacity:0;visibility:hidden;transition:all .45s ease;
+    }
+    .modal.show{opacity:1;visibility:visible;}
+    .modal-card{
+      width:min(92vw,760px);max-height:88vh;overflow:auto;
+      padding:32px;border-radius:30px;position:relative;
+    }
+    .modal-card h2{margin-bottom:14px;font-size:1.9rem;color:var(--ink);font-weight:800;}
+    .modal-card p{line-height:2.1;color:var(--ink-soft);margin-bottom:14px;font-size:1.03rem;font-weight:500;}
+    .close-btn{
+      position:absolute;top:16px;left:16px;width:44px;height:44px;
+      border:none;border-radius:50%;cursor:pointer;
+      color:var(--ink);font-size:1.1rem;font-weight:800;
+      background:rgba(255,255,255,.65);border:1.5px solid rgba(255,255,255,.70);
+    }
+    .close-btn:hover{background:rgba(255,255,255,.85);}
+
+    /* ── SCROLL TOP ── */
+    .scroll-top{
+      position:fixed;bottom:22px;left:22px;z-index:600;
+      width:52px;height:52px;border:none;border-radius:50%;cursor:pointer;
+      color:var(--ink);font-size:1.2rem;font-weight:800;
+      display:grid;place-items:center;
+      opacity:0;visibility:hidden;transition:var(--transition);
+    }
+    .scroll-top.show{opacity:1;visibility:visible;}
+    .scroll-top:hover{transform:translateY(-4px);}
+
+    /* ── BG ELEMENTS ── */
+    .floating-layer,.stars-layer,.clouds-layer,.particles-layer{
+      position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:-1;
+    }
+    .heart,.star,.particle,.cloud{position:absolute;user-select:none;pointer-events:none;}
+
+    .heart{color:rgba(232,127,184,.65);animation:floatUp linear infinite;}
+    @keyframes floatUp{
+      0%{transform:translateY(110vh) scale(.6) rotate(0deg);opacity:0;}
+      10%{opacity:.75;}
+      100%{transform:translateY(-20vh) scale(1.2) rotate(25deg);opacity:0;}
+    }
+
+    .star{
+      width:2px;height:2px;border-radius:50%;
+      background:rgba(90,130,170,.65);
+      box-shadow:0 0 6px rgba(167,216,255,.55);
+      animation:twinkle ease-in-out infinite;
+    }
+    @keyframes twinkle{0%,100%{opacity:.15;transform:scale(.9);}50%{opacity:.85;transform:scale(1.8);}}
+
+    .particle{border-radius:50%;background:rgba(167,216,255,.18);filter:blur(1px);animation:drift linear infinite;}
+    @keyframes drift{
+      0%{transform:translate(0,0);}
+      50%{transform:translate(40px,-60px);}
+      100%{transform:translate(-20px,-120px);}
+    }
+
+    .cloud{
+      width:180px;height:70px;background:rgba(255,255,255,.28);
+      filter:blur(4px);border-radius:999px;
+      box-shadow:45px -12px 0 8px rgba(255,255,255,.20),-38px -10px 0 10px rgba(255,255,255,.18);
+      animation:cloudMove linear infinite;
+    }
+    @keyframes cloudMove{from{transform:translateX(-25vw);}to{transform:translateX(125vw);}}
+
+    .music-note{position:absolute;font-size:1.2rem;opacity:.28;animation:floatY 5s ease-in-out infinite;}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1080px){
+      .hero-grid,.future-grid,.dua-grid{grid-template-columns:1fr;}
+      .counter-wrap{grid-template-columns:repeat(3,1fr);}
+      .cards-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:860px){
+      .top-nav{border-radius:26px;top:10px;padding:12px;flex-direction:column;}
+      .hero{padding-top:170px;}
+      .timeline::before{right:18px;transform:none;}
+      .timeline-item{width:calc(100% - 50px);margin-right:50px !important;margin-left:0 !important;}
+      .timeline-item::after{right:calc(100% + 21px) !important;left:auto !important;}
+    }
+    @media(max-width:640px){
+      .section{padding:72px 0;}
+      .cards-grid,.counter-wrap{grid-template-columns:1fr 1fr;}
+      .hero-actions,.letter-trigger-wrap{flex-direction:column;}
+      .btn{width:100%;}
+      .nav-links a{font-size:.82rem;padding:8px 10px;}
+    }
+    @media(max-width:420px){
+      .cards-grid,.counter-wrap{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars-layer"    id="starsLayer"></div>
+  <div class="particles-layer" id="particlesLayer"></div>
+  <div class="clouds-layer"   id="cloudsLayer"></div>
+  <div class="floating-layer" id="floatingLayer"></div>
+
+  <!-- ══ LOADING SCREEN ══ -->
+  <div class="loading-screen" id="loadingScreen">
+    <div class="loader-box glass">
+      <div class="loader-heart">💗</div>
+      <h1 class="loader-title">لحظة حب صغيرة</h1>
+      <p class="loader-text">بيتم تجهيز عالم رومانسي هادي، مليان دعوات من القلب، كلام حب، وطاقة حلوة مخصوص ليكي.</p>
+      <div class="loader-bar"><span></span></div>
+    </div>
+  </div>
+
+  <!-- ══ LOGIN SCREEN ══ -->
+  <div class="login-layer" id="loginLayer">
+    <div class="login-card glass">
+      <div class="login-badge">🔐</div>
+      <h2 class="login-title">بوابة قلبي ليكي</h2>
+      <p class="login-desc">المكان ده معمول مخصوص ليكي، بكل الحب والدعم والدعوات الحلوة. اكتبي كلمة السر عشان ندخل سوا لعالمنا الصغير.</p>
+      <input id="passwordInput" class="login-input" type="password" placeholder="اكتبي كلمة السر هنا..." />
+      <div class="error-msg" id="errorMsg">كلمة السر مش صحيحة... جربي تاني يا روحي 💔</div>
+      <button class="login-btn" id="loginBtn">ادخلي يا أجمل حاجة في حياتي 💙</button>
+      <div class="login-hint">كل حاجة هنا معمولة بحب مخصوص ليكي ✨</div>
+    </div>
+  </div>
+
+  <!-- ══ MAIN SITE ══ -->
+  <div class="site-shell" id="siteShell">
+
+    <nav class="top-nav glass">
+      <div class="brand">💙 إلى أجمل قلب</div>
+      <div class="nav-links">
+        <a href="#hero">البداية</a>
+        <a href="#counter">عدادنا</a>
+        <a href="#reasons">ليه بحبك</a>
+        <a href="#letter">رسالة ليكي</a>
+        <a href="#memories">ذكرياتنا</a>
+        <a href="#duas">دعواتي ليكي</a>
+        <a href="#future">مستقبلنا</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero section" id="hero">
+      <div class="container hero-grid">
+        <div class="hero-card glass reveal">
+          <div class="eyebrow">🌷 حب، دعم، دعاء، وطمأنينة</div>
+          <h1 class="hero-title">انتي <span>أجمل حكاية</span> في قلبي</h1>
+          <p class="hero-text">الموقع ده معمول ليكي انتي... عشان يفضل يفكرك قد إيه انتي غالية، قوية، جميلة، وقد إيه أنا مؤمن بيكي وبمستقبلك وبكل حلم جواكي.</p>
+          <div class="typing-line"><span id="typingText"></span><span class="typing-cursor">|</span></div>
+          <div class="hero-actions">
+            <a href="#letter" class="btn btn-primary">اقرّي رسالتي ليكي</a>
+            <button class="btn btn-secondary" id="openLetterBtn">افتحي جواب الحب</button>
+          </div>
+        </div>
+        <div class="hero-side reveal">
+          <div class="love-orb">
+            <div class="orb-core glass">
+              <div>
+                <h3>من قلبي ليكي</h3>
+                <p>انتي مش بس حب حياتي، انتي كمان الدعوة اللي بدعيها بصدق، والفرحة اللي مستنيها.</p>
+              </div>
+            </div>
+            <span class="music-note" style="top:18%;right:18%;">✨</span>
+            <span class="music-note" style="bottom:16%;left:18%;animation-delay:1.2s;">💫</span>
+            <span class="music-note" style="top:50%;left:14%;animation-delay:2.2s;">🤍</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- COUNTER -->
+    <section class="section" id="counter">
+      <div class="container">
+        <h2 class="section-title reveal">من يوم 22 / 11 / 2023</h2>
+        <p class="section-subtitle reveal">من اليوم ده، كل ثانية بقت ليها طعم مختلف. هنا عداد بيحسب رحلتنا سوا لحظة بلحظة بكل الحب.</p>
+        <div class="counter-wrap reveal">
+          <div class="counter-card glass"><div class="counter-value" id="years">0</div><div class="counter-label">سنة</div></div>
+          <div class="counter-card glass"><div class="counter-value" id="months">0</div><div class="counter-label">شهر</div></div>
+          <div class="counter-card glass"><div class="counter-value" id="days">0</div><div class="counter-label">يوم</div></div>
+          <div class="counter-card glass"><div class="counter-value" id="hours">0</div><div class="counter-label">ساعة</div></div>
+          <div class="counter-card glass"><div class="counter-value" id="minutes">0</div><div class="counter-label">دقيقة</div></div>
+          <div class="counter-card glass"><div class="counter-value" id="seconds">0</div><div class="counter-label">ثانية</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REASONS -->
+    <section class="section" id="reasons">
+      <div class="container">
+        <h2 class="section-title reveal">Reasons Why I Love You</h2>
+        <p class="section-subtitle reveal">بحبك لأسباب كتير جدًا، وكل يوم بيعدي بيزود الأسباب دي أكتر. انتي راحة، أمان، جمال، ودفا في نفس الوقت.</p>
+        <div class="cards-grid">
+          <div class="love-card glass reveal">
+            <div class="icon">💖</div>
+            <h3>قلبك الحنين</h3>
+            <p>بحب طيبة قلبك، وحنانك، والطريقة اللي بتخلي أي حاجة حواليكي ألطف وأهدى وأجمل.</p>
+          </div>
+          <div class="love-card glass reveal">
+            <div class="icon">🌸</div>
+            <h3>براءتك وجمالك</h3>
+            <p>فيكي جمال هادي ومريح، جمال مش بس في شكلك، لكن في روحك وكلامك ونظرتك للحياة.</p>
+          </div>
+          <div class="love-card glass reveal">
+            <div class="icon">🫶</div>
+            <h3>قوتك وقت التعب</h3>
+            <p>رغم الضغط والدراسة والخوف أوقات، بتفضلي واقفة وبتكملي، وده يخليكي عظيمة في عيني أكتر كل يوم.</p>
+          </div>
+          <div class="love-card glass reveal">
+            <div class="icon">📚</div>
+            <h3>إصرارك على النجاح</h3>
+            <p>بحب فيكي إنك بتحلمي وبتسعي، وإن تعبك ليه معنى كبير، وإنك فعلًا تستحقي أحسن مستقبل في الدنيا.</p>
+          </div>
+          <div class="love-card glass reveal">
+            <div class="icon">✨</div>
+            <h3>روحك المميزة</h3>
+            <p>انتي مختلفة بطريقة تخطف القلب، حضورك لوحده يغير اليوم كله ويخليه أهدى وأجمل.</p>
+          </div>
+          <div class="love-card glass reveal">
+            <div class="icon">🌙</div>
+            <h3>الأمان اللي فيكي</h3>
+            <p>في وسط زحمة الدنيا، انتي المكان اللي بحس فيه بالسكينة، والكلمة اللي بتطمن قلبي.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LETTER -->
+    <section class="section" id="letter">
+      <div class="container">
+        <h2 class="section-title reveal">رسالة ليكي</h2>
+        <p class="section-subtitle reveal">دي رسالة طويلة من قلبي ليكي، فيها حب كبير، امتنان، دعم، ودعوات من أصدق مكان جوايا.</p>
+        <div class="message-box glass reveal">
+          <p>يا أجمل بنت في الدنيا، يا ألطف روح، ويا أحن قلب شافته عيني، أنا بكتبلك الكلام ده وأنا حاسس قد إيه وجودك في حياتي نعمة كبيرة أوي. انتي مش مجرد حد بحبه، انتي الشخص اللي لما بفكر فيه قلبي بيهدى، واللي لما بسمع صوته اليوم كله بيتغير. انتي عندي أكبر من مجرد حب، انتي طمأنينة، وونس، ودعوة جميلة ربنا رزقني بيها.</p>
+          <p>أنا عارف إن السنة دي مش سهلة عليكي، وعارف إن تالتة ثانوي فيها ضغط كبير، وتعب، وتفكير، وخوف، ولحظات بتحسي فيها إن كل حاجة تقيلة. بس أنا عايزك تعرفي حاجة مهمة جدًا: انتي قدها. والله قدها وزيادة. انتي ذكية، قوية، مجتهدة، وقادرة تعملي اللي يمكن انتي نفسك تستغربيه من كتر جماله.</p>
+          <p>أنا بحبك جدًا، وبحب فيكي كل حاجة: ضحكتك، هدوءك، طريقتك، قلبك، حتى قلقك بحبه عشان أعرف قد إيه انتي إنسانة حساسة وبتحبي الحاجة اللي بتعمليها بصدق. بحب لما تتعبي وتكملي، ولما تخافي وتحاولي، ولما تنهاري شوية وترجعي تقفي تاني. ده مش ضعف، ده دليل إن جواكي روح عظيمة.</p>
+          <p>يا حبيبتي، لو الأيام شدت عليكي، أنا عايزك تقري الكلام ده وتفتكري إن في حد بيحبك بصدق، وبيشوفك نور جميل، وبيتمناكِ أسعد واحدة في الدنيا. لو المنهج كتر، ولو الامتحانات قربت، ولو التوتر زاد، خدي نفس عميق، وافتكري إن ربنا معاكي، وإن تعبك عمره ما هيروح.</p>
+          <p>أنا نفسي أشوف فرحتك يوم النتيجة، نفسي أشوف عينيكي وهي بتلمع من السعادة، ونفسي أشوف كل لحظة تعب عديتي بيها وهي بتتحول لفخر كبير جواكي. نفسي الدنيا تعوضك عن كل ضغط، وعن كل دمعة قلق، وعن كل مرة نمتي وانتي شايلة هم.</p>
+          <p>وأنا من قلبي بدعيلك كل يوم: يا رب افتحلها أبواب الخير كلها، يا رب ارزقها راحة البال، يا رب ثبت قلبها وقت الامتحان، يا رب نور عقلها، وسهل عليها الحفظ والفهم، وباركلها في وقتها وتعبها ومجهودها، وخلي النجاح حليفها، واكتب لها فرحة تنسيها أي تعب فات.</p>
+          <p>انتي الدعوة اللي بتيجي في بالي من غير ما أحس، والاسم اللي بييجي معاه ابتسامة، والحلم اللي نفسي أحافظ عليه العمر كله. ووسط كل حاجة، أنا مش بس بحبك، أنا بفخر بيكي. بفخر بطموحك، بأخلاقك، بدماغك، وبقلبك اللي ملوش زي.</p>
+          <p>اوعديني إنك مهما خفتي ما تسيبيش نفسك للقلق، ومهما تعبتي ما تشكيش في قدراتك. أنا معاكي بدعائي، بحبي، بكلامي، وبكل طاقتي الحلوة اللي نفسي أوصلها لقلبك. وانتي تقدري، وتستحقي، وهتوصلي.</p>
+          <p>بحبك حب هادي وعميق وصادق، حب فيه أمان ورضا وامتنان، حب نفسي يفضل سند ليكي مش حمل عليكي. نفسي دايمًا أكون الشخص اللي يهون عليكي، ويطمنك، ويفكرك قد إيه انتي جميلة من جوه وبره.</p>
+          <p>ربنا يحفظك، ويخليكي، ويكتبلك الخير في كل خطوة، ويعوض قلبك عن أي خوف، ويديكي أكتر مما تتمني، ويفرحك فرحة كبيرة أوي قريبة جدًا. وأنا هنا، كل مرة، بكل حب، بقولك: انتي قادرة، انتي تستحقي، وأنا فخور بيكي جدًا جدًا يا أجمل إنسانة في الدنيا.</p>
+        </div>
+        <div class="letter-trigger-wrap reveal">
+          <button class="btn btn-primary"  id="openLetterBtn2">افتحي جواب رومانسي 💌</button>
+          <button class="btn btn-secondary secret-btn" id="secretBtn">سر صغير ليكي ✨</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMORIES -->
+    <section class="section" id="memories">
+      <div class="container">
+        <h2 class="section-title reveal">ذكرياتنا</h2>
+        <p class="section-subtitle reveal">كل لحظة بينا ليها مكانة خاصة. حتى الحاجات الصغيرة، بالنسبة لقلبي كانت كبيرة جدًا.</p>
+        <div class="timeline">
+          <div class="timeline-item glass reveal">
+            <div class="date">22 نوفمبر 2023</div>
+            <h3>بداية الحكاية</h3>
+            <p>اليوم اللي بقى مختلف عن أي يوم تاني، واليوم اللي بدأت فيه أجمل مشاعر، وأهدى إحساس، وأصدق دعوة.</p>
+          </div>
+          <div class="timeline-item glass reveal">
+            <div class="date">أول فترة قرب</div>
+            <h3>كلام بسيط... أثره كبير</h3>
+            <p>تفاصيل صغيرة جدًا، لكن كل كلمة حلوة وكل اهتمام كان بيكبر جوايا إحساس إنك استثنائية فعلًا.</p>
+          </div>
+          <div class="timeline-item glass reveal">
+            <div class="date">وقت الدراسة</div>
+            <h3>فخور بيكي وانتي بتحاولي</h3>
+            <p>من أجمل الذكريات عندي إنّي شفتك بتحاربي عشان حلمك، وبتكملي رغم التعب، وده خلاني أحبك أكتر.</p>
+          </div>
+          <div class="timeline-item glass reveal">
+            <div class="date">كل مرة اتطمنتي</div>
+            <h3>الراحة اللي بينا</h3>
+            <p>كل مرة قلبك كان يهدى فيها بكلمة، كنت بحس إن أعظم حاجة أقدر أعملها هي إني أكون سبب طمأنينة ليكي.</p>
+          </div>
+          <div class="timeline-item glass reveal">
+            <div class="date">لحظاتنا الهادية</div>
+            <h3>الجمال في البساطة</h3>
+            <p>مش لازم حاجة تبقى كبيرة عشان تفضل، أوقات أبسط لحظة معاكي كانت كفاية تسيب جوايا أثر جميل جدًا.</p>
+          </div>
+          <div class="timeline-item glass reveal">
+            <div class="date">المستقبل</div>
+            <h3>لسه الأحلى جاي</h3>
+            <p>أجمل ذكرى لسه ما حصلتش، وهي اليوم اللي أشوفك فيه مبسوطة، ناجحة، فخورة بنفسك، وقلبي فرحان بيكي.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DUAS -->
+    <section class="section" id="duas">
+      <div class="container">
+        <h2 class="section-title reveal">دعواتي ليكي</h2>
+        <p class="section-subtitle reveal">دي مش مجرد كلمات، دي دعوات طالعة من القلب، لنفس هادئ، وعقل مطمئن، وفرحة كبيرة تستحقيها.</p>
+        <div class="dua-grid">
+          <div class="dua-card glass reveal">يارب وفقها وافتحلها كل أبواب الخير والنجاح، واكتب لها مستقبلاً يليق بقلبها الجميل.</div>
+          <div class="dua-card glass reveal">يارب اجعل تعبها ده بداية لأجمل فرحة في حياتها، وفرجًا كبيرًا يطمن قلبها.</div>
+          <div class="dua-card glass reveal">يارب طمن قلبها وحقق كل اللي نفسها فيه، وابعد عنها الخوف والقلق والحيرة.</div>
+          <div class="dua-card glass reveal">يارب هون عليها كل صعب، وسهل لها كل عسير، وباركلها في وقتها ومجهودها.</div>
+          <div class="dua-card glass reveal">يارب افتح على عقلها، ونور بصيرتها، وارزقها الفهم والتركيز والثبات وقت الامتحان.</div>
+          <div class="dua-card glass reveal">يارب بدل تعبها نجاح، وقلقها راحة، ودعواتها تحقيق، وأيامها القادمة فرح وسكينة.</div>
+          <div class="dua-card glass reveal">يارب احفظها من كل ضغط يكسرها، ومن كل فكرة تتعبها، وارزقها قوة وهدوء ورضا.</div>
+          <div class="dua-card glass reveal">يارب ارزقها فرحة النجاح اللي تليق بصبرها، وحقق لها أكثر مما تتمنى وأجمل مما تتخيل.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FUTURE -->
+    <section class="section" id="future">
+      <div class="container">
+        <h2 class="section-title reveal">مستقبلنا</h2>
+        <p class="section-subtitle reveal">أنا شايف المستقبل بيكي أحلى، أهدى، وأنضف. شايف فيه فرحة نجاحك، وراحة قلبك، وتحقيق كل حلم.</p>
+        <div class="future-grid">
+          <div class="future-card glass reveal">
+            <h3>نجاحك أول فرحتنا</h3>
+            <p>أول صورة في المستقبل اللي نفسي أشوفها هي انتي فرحانة بنفسك، مطمنة، وفخورة بالنتيجة اللي تعبتيلها.</p>
+          </div>
+          <div class="future-card glass reveal">
+            <h3>قلبك مرتاح</h3>
+            <p>نفسي الأيام اللي جاية تكون أهدى عليكي، مليانة راحة نفسية، وثقة، وابتسامة من القلب بعد كل توتر فات.</p>
+          </div>
+          <div class="future-card glass reveal">
+            <h3>أحلام أكبر</h3>
+            <p>النجاح ده مش نهاية، ده بداية أجمل، خطوة أولى نحو حياة فيها إنجازات كتير تليق بعقلك وقلبك وطموحك.</p>
+          </div>
+          <div class="future-card glass reveal">
+            <h3>حب يكبر بالطمأنينة</h3>
+            <p>أتمنى دايمًا أكون في حياتك راحة ودعم حقيقي، ونفضل نبني بينا حكاية حلوة أساسها الحب والاحترام والدعاء.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer section">
+      <div class="container">
+        <div class="footer-card glass reveal">
+          <p>إلى أجمل بنت في الدنيا: مهما الدنيا كانت صعبة، انتي قوية، جميلة، ومقدرة جدًا. وأنا من قلبي بدعيلك دايمًا، وبحبك حب مليان طمأنينة وفخر وأمل وصدق.</p>
+          <small>Made with endless love, soft prayers, and a heart full of you 🤍</small>
+        </div>
+      </div>
+    </footer>
+
+    <button class="scroll-top glass" id="scrollTopBtn">↑</button>
+  </div>
+
+  <!-- LETTER MODAL -->
+  <div class="modal" id="letterModal">
+    <div class="modal-card glass">
+      <button class="close-btn" id="closeModalBtn">✕</button>
+      <h2>جواب صغير... لكنه من القلب 💌</h2>
+      <p>يا روحي، يمكن الكلام ما يكفيش يوصف مكانتك عندي، لكن كل اللي أعرفه إنك حاجة جميلة جدًا في حياتي. وجودك يطمن، وكلامك يهون، وابتسامتك كفاية تخلي الدنيا أخف.</p>
+      <p>أنا بدعيلك بكل حب: يا رب يفرح قلبها، ويجبر خاطرها، ويكتب لها نجاح يبهرها، وسعادة تشبه نقاء قلبها. ويا رب كل خطوة جاية في حياتها تكون أسهل وأجمل ومليانة خير.</p>
+      <p>بحبك جدًا، وبوعدك أفضل دايمًا فاكر إنك تستحقي الكلام الحلو، والدعم، والاهتمام، والفرحة الكبيرة. 💙</p>
+    </div>
+  </div>
+
+  <!-- SECRET MODAL -->
+  <div class="modal" id="secretModal">
+    <div class="modal-card glass">
+      <button class="close-btn" id="closeSecretBtn">✕</button>
+      <h2>المفاجأة ✨</h2>
+      <p>السر الصغير هو إنك كل يوم بتكبري في قلبي أكتر من اليوم اللي قبله.</p>
+      <p>ولو سألتيني نفسي إيه ليكي دلوقتي، هقولك: نفس هادي، ودرجات تفرحك، وقلب مطمن، ومستقبل عظيم، وفرحة كبيرة أوي تقولك إن كل التعب كان يستاهل.</p>
+      <p>وانتي بالنسبة لي دايمًا: أجمل دعوة، وأغلى حكاية، وأحن قلب. 🤍</p>
+    </div>
+  </div>
+
+  <script>
+    /* ══════════════════════════════════════════
+       CORE CONFIG
+    ══════════════════════════════════════════ */
+    const PASSWORD  = "221123";
+    const startDate = new Date(2023, 10, 22, 0, 0, 0); // Nov 22 2023
+
+    /* ══════════════════════════════════════════
+       DOM REFERENCES
+    ══════════════════════════════════════════ */
+    const loadingScreen  = document.getElementById("loadingScreen");
+    const loginLayer     = document.getElementById("loginLayer");
+    const siteShell      = document.getElementById("siteShell");
+    const passwordInput  = document.getElementById("passwordInput");
+    const loginBtn       = document.getElementById("loginBtn");
+    const errorMsg       = document.getElementById("errorMsg");
+    const scrollTopBtn   = document.getElementById("scrollTopBtn");
+    const openLetterBtn  = document.getElementById("openLetterBtn");
+    const openLetterBtn2 = document.getElementById("openLetterBtn2");
+    const letterModal    = document.getElementById("letterModal");
+    const closeModalBtn  = document.getElementById("closeModalBtn");
+    const secretBtn      = document.getElementById("secretBtn");
+    const secretModal    = document.getElementById("secretModal");
+    const closeSecretBtn = document.getElementById("closeSecretBtn");
+    const typingText     = document.getElementById("typingText");
+
+    /* ══════════════════════════════════════════
+       LOADING
+    ══════════════════════════════════════════ */
+    window.addEventListener("load", () => {
+      document.body.style.overflowY = "hidden";
+      setTimeout(() => {
+        loadingScreen.classList.add("fade-out");
+      }, 3200);
+    });
+
+    /* ══════════════════════════════════════════
+       LOGIN
+    ══════════════════════════════════════════ */
+    function unlockSite() {
+      loginLayer.classList.add("hidden-state");
+      siteShell.classList.add("visible");
+      document.body.style.overflowY = "auto";
+    }
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.classList.remove("show");
+      void errorMsg.offsetWidth; // force reflow for re-animation
+      errorMsg.classList.add("show");
+    }
+
+    function handleLogin() {
+      if (passwordInput.value.trim() === PASSWORD) {
+        errorMsg.classList.remove("show");
+        unlockSite();
+      } else {
+        showError("كلمة السر مش صحيحة... جربي تاني يا روحي 💔");
+        passwordInput.value = "";
+        passwordInput.focus();
+      }
+    }
+
+    loginBtn.addEventListener("click", handleLogin);
+    passwordInput.addEventListener("keydown", e => {
+      if (e.key === "Enter") handleLogin();
+    });
+
+    /* ══════════════════════════════════════════
+       TYPING ANIMATION
+    ══════════════════════════════════════════ */
+    const lines = [
+      "انتي أقوى من أي خوف، وأجمل من أي ضغط.",
+      "يا رب أيامك الجاية كلها نجاح وطمأنينة.",
+      "بحبك... وبفخر بيكي جدًا.",
+      "كل خطوة منك ناحية حلمك بتفرح قلبي.",
+      "يا رب يحققلك كل اللي نفسك فيه."
+    ];
+    let li = 0, ci = 0, del = false;
+
+    function typeLoop() {
+      const cur = lines[li];
+      typingText.textContent = del ? cur.slice(0, ci--) : cur.slice(0, ci++);
+      if (!del && ci > cur.length)   { del = true;  setTimeout(typeLoop, 1800); return; }
+      if (del  && ci < 0)            { del = false; li = (li + 1) % lines.length; }
+      setTimeout(typeLoop, del ? 32 : 68);
+    }
+    typeLoop();
+
+    /* ══════════════════════════════════════════
+       RELATIONSHIP COUNTER
+    ══════════════════════════════════════════ */
+    function updateCounter() {
+      const now  = new Date();
+      let   temp = new Date(startDate);
+      let   yrs  = 0, mos = 0;
+
+      // count full years
+      while (true) {
+        const nx = new Date(temp);
+        nx.setFullYear(nx.getFullYear() + 1);
+        if (nx <= now) { yrs++; temp = nx; } else break;
+      }
+      // count full months
+      while (true) {
+        const nx = new Date(temp);
+        nx.setMonth(nx.getMonth() + 1);
+        if (nx <= now) { mos++; temp = nx; } else break;
+      }
+
+      const diff  = Math.floor((now - temp) / 1000);
+      const d     = Math.floor(diff / 86400);
+      const h     = Math.floor((diff % 86400) / 3600);
+      const m     = Math.floor((diff % 3600)  / 60);
+      const s     = diff % 60;
+
+      document.getElementById("years").textContent   = yrs;
+      document.getElementById("months").textContent  = mos;
+      document.getElementById("days").textContent    = d;
+      document.getElementById("hours").textContent   = String(h).padStart(2, "0");
+      document.getElementById("minutes").textContent = String(m).padStart(2, "0");
+      document.getElementById("seconds").textContent = String(s).padStart(2, "0");
+    }
+    updateCounter();
+    setInterval(updateCounter, 1000);
+
+    /* ══════════════════════════════════════════
+       SCROLL REVEAL
+    ══════════════════════════════════════════ */
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("active"); });
+    }, { threshold: 0.14 });
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+
+    /* ══════════════════════════════════════════
+       SCROLL-TO-TOP BUTTON
+    ══════════════════════════════════════════ */
+    window.addEventListener("scroll", () => {
+      scrollTopBtn.classList.toggle("show", window.scrollY > 450);
+    });
+    scrollTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    /* ══════════════════════════════════════════
+       MODALS
+    ══════════════════════════════════════════ */
+    function openModal(m)  { m.classList.add("show");    document.body.style.overflow = "hidden"; }
+    function closeModal(m) {
+      m.classList.remove("show");
+      if (!letterModal.classList.contains("show") && !secretModal.classList.contains("show"))
+        document.body.style.overflow = "auto";
+    }
+
+    openLetterBtn.addEventListener ("click", () => openModal(letterModal));
+    openLetterBtn2.addEventListener("click", () => openModal(letterModal));
+    closeModalBtn.addEventListener ("click", () => closeModal(letterModal));
+    secretBtn.addEventListener     ("click", () => openModal(secretModal));
+    closeSecretBtn.addEventListener("click", () => closeModal(secretModal));
+
+    [letterModal, secretModal].forEach(m =>
+      m.addEventListener("click", e => { if (e.target === m) closeModal(m); })
+    );
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") { closeModal(letterModal); closeModal(secretModal); }
+    });
+
+    /* ══════════════════════════════════════════
+       BACKGROUND: STARS
+    ══════════════════════════════════════════ */
+    (function createStars() {
+      const layer = document.getElementById("starsLayer");
+      for (let i = 0; i < 100; i++) {
+        const s = document.createElement("span");
+        s.className = "star";
+        const size = 1 + Math.random() * 3;
+        s.style.cssText = `
+          top:${Math.random()*100}vh;
+          left:${Math.random()*100}vw;
+          width:${size}px; height:${size}px;
+          animation-duration:${1.8 + Math.random()*3}s;
+          animation-delay:${Math.random()*4}s;
+        `;
+        layer.appendChild(s);
+      }
+    })();
+
+    /* ══════════════════════════════════════════
+       BACKGROUND: PARTICLES
+    ══════════════════════════════════════════ */
+    (function createParticles() {
+      const layer = document.getElementById("particlesLayer");
+      for (let i = 0; i < 30; i++) {
+        const p = document.createElement("span");
+        p.className = "particle";
+        const size = 6 + Math.random() * 14;
+        p.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${Math.random()*100}vw;
+          top:${Math.random()*100}vh;
+          animation-duration:${14 + Math.random()*16}s;
+          animation-delay:${Math.random()*8}s;
+        `;
+        layer.appendChild(p);
+      }
+    })();
+
+    /* ══════════════════════════════════════════
+       BACKGROUND: CLOUDS
+    ══════════════════════════════════════════ */
+    (function createClouds() {
+      const layer = document.getElementById("cloudsLayer");
+      for (let i = 0; i < 7; i++) {
+        const c = document.createElement("span");
+        c.className = "cloud";
+        c.style.cssText = `
+          top:${5 + Math.random()*38}vh;
+          opacity:${(0.10 + Math.random()*0.16).toFixed(2)};
+          transform:scale(${(0.7 + Math.random()*0.8).toFixed(2)});
+          animation-duration:${40 + Math.random()*40}s;
+          animation-delay:-${Math.random()*30}s;
+        `;
+        layer.appendChild(c);
+      }
+    })();
+
+    /* ══════════════════════════════════════════
+       BACKGROUND: FLOATING HEARTS
+    ══════════════════════════════════════════ */
+    (function createHearts() {
+      const layer   = document.getElementById("floatingLayer");
+      const symbols = ["❤","♡","♥","💗","💖","💘","🤍"];
+      for (let i = 0; i < 28; i++) {
+        const h = document.createElement("span");
+        h.className   = "heart";
+        h.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+        h.style.cssText = `
+          left:${Math.random()*100}vw;
+          font-size:${14 + Math.random()*26}px;
+          animation-duration:${10 + Math.random()*14}s;
+          animation-delay:-${Math.random()*16}s;
+          opacity:${(0.22 + Math.random()*0.60).toFixed(2)};
+        `;
+        layer.appendChild(h);
+      }
+    })();
+
+    /* ══════════════════════════════════════════
+       TILT EFFECT ON CARDS
+    ══════════════════════════════════════════ */
+    document.querySelectorAll(".love-card, .dua-card, .future-card, .counter-card, .timeline-item")
+      .forEach(card => {
+        card.addEventListener("mousemove", e => {
+          const r  = card.getBoundingClientRect();
+          const rx = ((e.clientY - r.top  - r.height/2) / (r.height/2)) * -5;
+          const ry = ((e.clientX - r.left - r.width /2) / (r.width /2)) *  5;
+          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-5px)`;
+        });
+        card.addEventListener("mouseleave", () => { card.style.transform = ""; });
+      });
+  </script>
+</body>
+</html>
